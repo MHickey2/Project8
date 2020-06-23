@@ -4,6 +4,8 @@ const mongoose = require("mongoose");
 const bodyParser = require('body-parser');
 const path = require('path');
 const session = require('express-session');
+var bcrypt = require('bcrypt')
+const saltRounds = 10;
 const MongoStore = require('connect-mongo')(session);
 
 //Connexion à la base de donnée

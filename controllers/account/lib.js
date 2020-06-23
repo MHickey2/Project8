@@ -1,4 +1,6 @@
 const User = require('../../schema/schemaUser.js');
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
 
 function signup(req, res) {
     if (!req.body.email || !req.body.password) {
@@ -8,9 +10,11 @@ function signup(req, res) {
             "text": "Requête invalide"
         })
     } else {
+        const password = ''
+        bcrypt.hash(password, saltRounds, function(err, hash) {
         var user = {
             email: req.body.email,
-            password: req.body.password
+            password: hash
         }
         var findUser = new Promise(function (resolve, reject) {
             User.findOne({
@@ -40,7 +44,9 @@ function signup(req, res) {
                     res.redirect('../../ticket/');
                 }
             })
-        }, function (error) {
+        }, 
+        
+        function (error) {
             switch (error) {
                 case 500:
                     res.status(500).json({
@@ -58,7 +64,8 @@ function signup(req, res) {
                     })
             }
         })
-    }
+    })
+}
 }
 
 function signupForm(req, res) {
@@ -99,6 +106,28 @@ function login(req, res) {
         })
     }
 }
+
+//verify admin
+// function verifyAdmin(req,res){
+//     const name = req.body.username
+//     console.log(name)
+//     User.findOne({username: name},(err,user) => { 
+//         if(err) {
+//             next(err)
+//         }
+//         else if(!user) {
+//             next(new Error("user not found"))
+//         }
+//         else {
+//             if(!user.admin) {
+//                 next(new Error("you are not an admin"))
+//             }
+//             else {
+//                 next()
+//             }
+//         }                         
+//     });
+// };
 
 function loginForm(req, res) {
     res.status(200).render('account/login', {title: 'Connexion'});

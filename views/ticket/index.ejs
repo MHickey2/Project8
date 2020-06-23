@@ -8,7 +8,7 @@
             <table>
                 <thead>
                     <tr>
-                        <th class="idTicket">Tichet ID</th>
+                        <th class="idTicket">Title ticket</th>
                         <th class="showTicket">Voir Ticket</th>
                         <th class="editTicket">Editer Ticket</th>
                     </tr>
@@ -17,7 +17,7 @@
                     <% for (index = 0; index < tickets.length; index++) { %>
                         <% const ticket = tickets[index] %>
                         <tr key={index}>
-                            <td><%= ticket._id %></td>
+                            <td><%= ticket.title %></td>
                             <td><a href="/ticket/<%= ticket._id %>" class="nav-link">Voir</a></td>
                             <td><a href="/ticket/<%= ticket._id %>/edit" class="nav-link">Editer</a></td>
                         </tr>
