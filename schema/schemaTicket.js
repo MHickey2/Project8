@@ -9,15 +9,20 @@ var ticketSchema = mongoose.Schema({
 		type: String,
 		required: true
 	},
-	responsible: {
-        type: String,
-        required: true
+	assignedTo: {
+        type: Schema.Types.ObjectId,
+        required: false
     },
     priority: {
         type: String,
         required: true
     },
     completed: {
+        type: Boolean,
+        required: true,
+        default: false
+    },
+    assigned: {
         type: Boolean,
         required: true,
         default: false
