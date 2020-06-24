@@ -12,14 +12,14 @@ const authenticateJWT = (req, res, next) => {
 
         jwt.verify(token, config.secret, (err, user) => {
             if (err) {
-                return res.status(200).render('account/login', {title: 'Connexion'});
+                return res.status(200).render('user/login', {title: 'Connexion'});
             }
 
             req.user = user;
             next();
         });
     } else {
-        res.status(200).render('account/login', {title: 'Connexion'});
+        res.status(200).render('user/login', {title: 'Connexion'});
     }
 };
 

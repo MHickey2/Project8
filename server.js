@@ -52,6 +52,9 @@ app.use(function (req, res, next) {
 
 //Définition du routeur
 var userRouter = require(__dirname + '/routes/userController');
+app.get('/', (req, res, next) => {
+    res.redirect('user/login')
+});
 app.use('/user', userRouter);
 var ticketRouter = require(__dirname + '/routes/ticketController');
 app.use('/ticket', ticketRouter);
