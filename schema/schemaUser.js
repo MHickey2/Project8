@@ -27,7 +27,7 @@ userSchema.methods = {
 		return password === this.password;
 	},
 	getToken: function () {
-		return jwt.sign({email: this.email}, config.secret, {expiresIn: '1d'});
+		return jwt.sign({id: this._id, email: this.email}, config.secret, {expiresIn: '1d'});
 	}
 }
 

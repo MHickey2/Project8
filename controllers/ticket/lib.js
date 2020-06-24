@@ -1,12 +1,13 @@
 const Ticket = require('../../schema/schemaTicket.js');
 
 function create(req, res) {
-	if (!req.body.description || !req.body.responsible || !req.body.priority) {
+	if (!req.body.title || !req.body.description || !req.body.priority) {
 		res.status(400).json({
 			"text": "Requête invalide"
 		})
 	} else {
 		var ticket = {
+            createdBy: req.user.id,
 			title: req.body.title,
 			description: req.body.description,
 			responsible: req.body.responsible,

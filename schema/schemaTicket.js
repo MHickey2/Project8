@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
 var ticketSchema = mongoose.Schema({
     title: {
@@ -26,6 +27,10 @@ var ticketSchema = mongoose.Schema({
         type: Boolean,
         required: true,
         default: false
+    },
+    createdBy: {
+        type: Schema.Types.ObjectId,
+        required: true
     }
 },{ timestamps: { createdAt: 'created_at' }})
 
