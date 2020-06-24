@@ -10,8 +10,7 @@ function signup(req, res) {
             "text": "Requête invalide"
         })
     } else {
-        const password = ''
-        bcrypt.hash(password, saltRounds, function(err, hash) {
+        bcrypt.hash(req.body.password, saltRounds, function(err, hash) {
         var user = {
             email: req.body.email,
             password: hash
@@ -93,17 +92,20 @@ function login(req, res) {
                 })
             }
             else {
-                if (user.authenticate(req.body.password)) {
-                    req.session.token = user.getToken();
-                    res.redirect('../../ticket/');
-                }
-                else{
-                    res.status(401).json({
-                        "text": "Mot de passe incorrect"
-                    })
-                }
+                bcrypt.compare(req.body.password, user.password, function(err, match) {
+                    if (err) throw err;
+
+                    if (match === true) {
+                        req.session.token = user.getToken();
+                        res.redirect('../../ticket/');
+                    } else {
+                        res.status(401).json({
+                            "text": "Incorrect password"
+                        });
+                    }
+                });
             }
-        })
+        });
     }
 }
 
