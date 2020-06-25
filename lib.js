@@ -81,8 +81,6 @@ function login(req, res) {
     const password = '';
     //bcrypt.hash(password, saltRounds, function(err, hash) {
     if (!req.body.email || !req.body.password) {
-        
-        
         //Le cas où l'email ou bien le password ne serait pas soumit ou nul
         res.status(400).json({
             text: 'Requête invalide',
@@ -125,7 +123,6 @@ function login(req, res) {
     }
 }
 
-
 //verify admin
 // function verifyAdmin(req,res){
 //     const name = req.body.username
@@ -149,7 +146,7 @@ function login(req, res) {
 // };
 
 function loginForm(req, res) {
-    res.status(200).render('account/login', { title: 'Connexion' });
+    res.status(200).render('account/login', { title: 'Login' });
 }
 
 function signout(req, res) {

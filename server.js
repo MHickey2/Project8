@@ -4,12 +4,10 @@ const mongoose = require("mongoose");
 const bodyParser = require('body-parser');
 const path = require('path');
 const session = require('express-session');
-var bcrypt = require('bcrypt')
-const saltRounds = 10;
 const MongoStore = require('connect-mongo')(session);
 
 //Connexion à la base de donnée
-mongoose.connect('mongodb://localhost/projet10').then(() => {
+mongoose.connect('mongodb://localhost/project8').then(() => {
 	console.log('Connected to mongoDB')
 }).catch(e => {
 	console.log('Error while DB connecting');
@@ -53,7 +51,7 @@ app.use(function (req, res, next) {
 //Définition du routeur
 var userRouter = require(__dirname + '/routes/userController');
 app.get('/', (req, res, next) => {
-    res.redirect('user/login')
+    res.redirect('ticket')
 });
 app.use('/user', userRouter);
 var ticketRouter = require(__dirname + '/routes/ticketController');

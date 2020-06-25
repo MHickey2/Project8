@@ -7,105 +7,114 @@ function signup(req, res) {
         //Le cas où l'email ou bien le password ne serait pas soumit ou nul
         console.log(req.body);
         res.status(400).json({
-            "text": "Requête invalide"
-        })
+            text: 'Requête invalide',
+        });
     } else {
-        bcrypt.hash(req.body.password, saltRounds, function(err, hash) {
-        var user = {
-            email: req.body.email,
-            password: hash
-        }
-        var findUser = new Promise(function (resolve, reject) {
-            User.findOne({
-                email: user.email
-            }, function (err, result) {
-                if (err) {
-                    reject(500);
-                } else {
-                    if (result) {
-                        reject(200)
-                    } else {
-                        resolve(true)
+        bcrypt.hash(req.body.password, saltRounds, function (err, hash) {
+            var user = {
+                email: req.body.email,
+                password: hash,
+            };
+            var findUser = new Promise(function (resolve, reject) {
+                User.findOne(
+                    {
+                        email: user.email,
+                    },
+                    function (err, result) {
+                        if (err) {
+                            reject(500);
+                        } else {
+                            if (result) {
+                                reject(200);
+                            } else {
+                                resolve(true);
+                            }
+                        }
+                    }
+                );
+            });
+
+            findUser.then(
+                function () {
+                    var _u = new User(user);
+                    _u.save(function (err, user) {
+                        if (err) {
+                            res.status(500).json({
+                                text: 'Erreur interne',
+                            });
+                        } else {
+                            req.session.token = user.getToken();
+                            res.redirect('../../ticket/');
+                        }
+                    });
+                },
+
+                function (error) {
+                    switch (error) {
+                        case 500:
+                            res.status(500).json({
+                                text: 'Erreur interne',
+                            });
+                            break;
+                        case 200:
+                            res.status(200).json({
+                                text: "L'adresse email existe déjà",
+                            });
+                            break;
+                        default:
+                            res.status(500).json({
+                                text: 'Erreur interne',
+                            });
                     }
                 }
-            })
-        })
-
-        findUser.then(function () {
-            var _u = new User(user);
-            _u.save(function (err, user) {
-                if (err) {
-                    res.status(500).json({
-                        "text": "Erreur interne"
-                    })
-                } else {
-                    req.session.token = user.getToken();
-                    res.redirect('../../ticket/');
-                }
-            })
-        }, 
-        
-        function (error) {
-            switch (error) {
-                case 500:
-                    res.status(500).json({
-                        "text": "Erreur interne"
-                    })
-                    break;
-                case 200:
-                    res.status(200).json({
-                        "text": "L'adresse email existe déjà"
-                    })
-                    break;
-                default:
-                    res.status(500).json({
-                        "text": "Erreur interne"
-                    })
-            }
-        })
-    })
-}
+            );
+        });
+    }
 }
 
 function signupForm(req, res) {
-    res.status(200).render('account/signup', {title: 'Inscription'});
+    res.status(200).render('account/signup', { title: 'Inscription' });
 }
 
 function login(req, res) {
     if (!req.body.email || !req.body.password) {
         //Le cas où l'email ou bien le password ne serait pas soumit ou nul
         res.status(400).json({
-            "text": "Requête invalide"
-        })
-    } else {
-        User.findOne({
-            email: req.body.email
-        }, function (err, user) {
-            if (err) {
-                res.status(500).json({
-                    "text": "Erreur interne"
-                })
-            }
-            else if(!user){
-                res.status(401).json({
-                    "text": "L'utilisateur n'existe pas"
-                })
-            }
-            else {
-                bcrypt.compare(req.body.password, user.password, function(err, match) {
-                    if (err) throw err;
-
-                    if (match === true) {
-                        req.session.token = user.getToken();
-                        res.redirect('../../ticket/');
-                    } else {
-                        res.status(401).json({
-                            "text": "Incorrect password"
-                        });
-                    }
-                });
-            }
+            text: 'Requête invalide',
         });
+    } else {
+        User.findOne(
+            {
+                email: req.body.email,
+            },
+            function (err, user) {
+                if (err) {
+                    res.status(500).json({
+                        text: 'Erreur interne',
+                    });
+                } else if (!user) {
+                    res.status(401).json({
+                        text: "L'utilisateur n'existe pas",
+                    });
+                } else {
+                    bcrypt.compare(req.body.password, user.password, function (
+                        err,
+                        match
+                    ) {
+                        if (err) throw err;
+
+                        if (match === true) {
+                            req.session.token = user.getToken();
+                            res.redirect('../../ticket/');
+                        } else {
+                            res.status(401).json({
+                                text: 'Incorrect password',
+                            });
+                        }
+                    });
+                }
+            }
+        );
     }
 }
 
@@ -113,7 +122,7 @@ function login(req, res) {
 // function verifyAdmin(req,res){
 //     const name = req.body.username
 //     console.log(name)
-//     User.findOne({username: name},(err,user) => { 
+//     User.findOne({username: name},(err,user) => {
 //         if(err) {
 //             next(err)
 //         }
@@ -127,12 +136,12 @@ function login(req, res) {
 //             else {
 //                 next()
 //             }
-//         }                         
+//         }
 //     });
 // };
 
 function loginForm(req, res) {
-    res.status(200).render('account/login', {title: 'Connexion'});
+    res.status(200).render('account/login', { title: 'Login' });
 }
 
 function signout(req, res) {

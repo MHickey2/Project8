@@ -11,7 +11,7 @@ var ticketSchema = mongoose.Schema({
 		required: true
 	},
 	assignedTo: {
-        type: Schema.Types.ObjectId,
+        type: String,
         required: false
     },
     priority: {

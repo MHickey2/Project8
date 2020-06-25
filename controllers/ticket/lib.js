@@ -1,9 +1,10 @@
 const Ticket = require('../../schema/schemaTicket.js');
+const User = require('../../schema/schemaUser');
 
 function create(req, res) {
 	if (!req.body.title || !req.body.description || !req.body.priority) {
 		res.status(400).json({
-			"text": "Requête invalide"
+			"text": "Invalid request"
 		})
 	} else {
 		var ticket = {
@@ -18,7 +19,7 @@ function create(req, res) {
 		_t.save(function (err, ticket) {
 			if (err) {
 				res.status(500).json({
-					"text": "Erreur interne"
+					"text": "Internal error"
 				})
 			} else {
 				res.redirect(`${ticket.getId()}`);
@@ -34,7 +35,7 @@ function createForm(req, res) {
 function show(req, res) {
 	if (!req.params.id) {
 		res.status(400).json({
-			"text": "Requête invalide"
+			"text": "Invalid request"
 		})
 	} else {
 		var findTicket = new Promise(function (resolve, reject) {
@@ -57,17 +58,17 @@ function show(req, res) {
 			switch (error) {
 				case 500:
 					res.status(500).json({
-						"text": "Erreur interne"
+						"text": "Internal error"
 					})
 					break;
 				case 200:
 					res.status(200).json({
-						"text": "Le ticket n'existe pas"
+						"text": "The ticket does not exist"
 					})
 					break;
 				default:
 					res.status(500).json({
-						"text": "Erreur interne"
+						"text": "Internal error"
 					})
 			}
 		})
@@ -77,7 +78,7 @@ function show(req, res) {
 function edit(req, res) {
 	if (!req.params.id) {
 		res.status(400).json({
-			"text": "Requête invalide"
+			"text": "Invalid request"
 		})
 	} else {
 		var findTicket = new Promise(function (resolve, reject) {
@@ -92,42 +93,71 @@ function edit(req, res) {
 					}
 				}
 			})
-		})
+        })
+        
+        let userEmails = new Promise(function (resolve, reject) {
+            User.find({}, function (err, users) {
+                if (err) {
+                    reject(500);
+                } else {
+                    let userEmails = [];
+                    users.forEach(user => {
+                        userEmails.push(user.email);
+                    });
+                    console.log('user emails are', userEmails);
+                    resolve(userEmails);
+                }
+            });
+        });
 
-		findTicket.then(function (ticket) {
-			res.status(200).render('ticket/edit', {title: `Modifier ticket n°${ticket._id}`, ticket});
-		}, function (error) {
+        Promise.all([findTicket, userEmails]).then(values => {
+            let ticket = values[0];
+            let userEmails = values[1];
+			res.status(200).render('ticket/edit', {title: `Modifier ticket n°${ticket._id}`, ticket, userEmails});
+        }, function (error) {
 			switch (error) {
 				case 500:
 					res.status(500).json({
-						"text": "Erreur interne"
+						"text": "Internal error"
 					})
 					break;
 				case 200:
 					res.status(200).json({
-						"text": "Le ticket n'existe pas"
+						"text": "The ticket does not exist"
 					})
 					break;
 				default:
 					res.status(500).json({
-						"text": "Erreur interne"
+						"text": "Internal error"
 					})
 			}
-		})
+		});
+
+
+		findTicket.then(function (ticket) {
+		}, )
 	}
 }
 
 function update(req, res) {
-	console.log(req.body);
-	if (!req.params.id || !req.body.description || !req.body.responsible || !req.body.priority) {
+    console.log(req.body);
+    console.log(req.params.id)
+    console.log(req.body.description)
+    console.log(req.body.assignedTo)
+    console.log(req.body.priority)
+    console.log(req.params.id)
+
+	if (!req.params.id || !req.body.description || !req.body.assignedTo || !req.body.priority) {
 		res.status(400).json({
-			"text": "Requête invalide"
+			"text": "Invalid request !if"
 		})
 	} else {
 		var findTicket = new Promise(function (resolve, reject) {
 			req.body.completed = typeof req.body.completed !== 'undefined' ? true : false;
 
 			Ticket.findByIdAndUpdate(req.params.id, req.body, function (err, result) {
+                console.log('result is0', result)
+                console.log('err is', err)
 				if (err) {
 					reject(500);
 				} else {
@@ -146,17 +176,17 @@ function update(req, res) {
 			switch (error) {
 				case 500:
 					res.status(500).json({
-						"text": "Erreur interne"
+						"text": "Internal error case 500"
 					})
 					break;
 				case 200:
 					res.status(200).json({
-						"text": "Le ticket n'existe pas"
+						"text": "The ticket does not exist"
 					})
 					break;
 				default:
 					res.status(500).json({
-						"text": "Erreur interne"
+						"text": "Internal error default 500"
 					})
 			}
 		})
@@ -179,12 +209,12 @@ function list(req, res) {
 	})
 
 	findTicket.then(function (tickets) {
-		res.status(200).render('ticket/index', {title: 'Liste des tickets', tickets});
+		res.status(200).render('ticket/index', {title: 'List of tickets', tickets});
 	}, function (error) {
 		switch (error) {
 			case 500:
 				res.status(500).json({
-					"text": "Erreur interne"
+					"text": "Internal error"
 				})
 				break;
 			case 200:
@@ -194,7 +224,7 @@ function list(req, res) {
 				break;
 			default:
 				res.status(500).json({
-					"text": "Erreur interne"
+					"text": "Internal error"
 				})
 		}
 	})
