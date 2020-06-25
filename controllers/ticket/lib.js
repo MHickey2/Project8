@@ -138,10 +138,6 @@ function edit(req, res) {
 					})
 			}
 		});
-
-
-		findTicket.then(function (ticket) {
-		}, )
 	}
 }
 
