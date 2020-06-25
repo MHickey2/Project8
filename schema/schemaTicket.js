@@ -33,6 +33,15 @@ var ticketSchema = mongoose.Schema(
             type: String,
             required: true,
         },
+        comments: {
+            type: Object,
+            userName: {
+                type: String,
+            },
+            comment: {
+                type: String,
+            },
+        },
     },
     { timestamps: { createdAt: 'created_at' } }
 );

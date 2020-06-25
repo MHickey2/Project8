@@ -1,12 +1,12 @@
-const ticket = require('../controllers/ticket/lib.js');
-const express = require('express');
+const ticket = require("../controllers/ticket/lib.js");
+const express = require("express");
 const router = express.Router();
-const jwt = require('jsonwebtoken');
+const jwt = require("jsonwebtoken");
 
-const config = require('../config/config');
+const config = require("../config/config");
 
 const authenticateJWT = (req, res, next) => {
-    const token = req.session.token;
+  const token = req.session.token;
 
     if (token) {
         jwt.verify(token, config.secret, (err, user) => {
@@ -37,6 +37,7 @@ const authenticateAdmin = (req, res, next) => {
 router.get('/create', authenticateJWT, ticket.createForm);
 router.post('/create', authenticateJWT, ticket.create);
 router.get('/:id', authenticateJWT, ticket.show);
+router.post("/:id", authenticateJWT, ticket.addComment);
 router.get('/:id/edit', [authenticateJWT, authenticateAdmin], ticket.edit);
 router.post('/:id/update', authenticateJWT, ticket.update);
 router.get('/', authenticateJWT, ticket.list);

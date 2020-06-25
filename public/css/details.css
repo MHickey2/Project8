@@ -1,9 +1,23 @@
 .details {
-	width: 400px;
-	margin: auto;
+  width: 400px;
+  margin: auto;
 }
 
 .details h2 {
-	margin-left: 0;
-	text-align: left;
+  margin-left: 0;
+  text-align: left;
+}
+
+#addComment {
+  width: 400px;
+  margin: 50px auto;
+}
+#comments {
+  width: 620px;
+  margin: 50px;
+  margin-left: 35%;
+}
+
+#comments tr {
+  background-color: #e1e1e1;
 }
