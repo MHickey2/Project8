@@ -31,8 +31,8 @@
             <%ticket.comments.forEach(function (com){ %>
             <tr>
                 <td>
-                    <p><%= com.userName %></p>
                     <p><%= com.comment %></p>
+                    <p><em>- <%= com.userName %></em></p>
                 </td>
             </tr>
             <% })%>
