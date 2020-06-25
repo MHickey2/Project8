@@ -11,7 +11,7 @@
         <h2>Description : <%= ticket.description %></h2>
         <h2>Assigned to : <%= ticket.assignedTo %></h2>
         <h2>Priority : <%= ticket.priority %></h2>
-        <h2>Status : <%= ticket.completed ? "Résolu" : "En cours" %></h2>
+        <h2>Status : <% if(ticket.completed) { %> <i class="fa fa-check complete" aria-hidden="true"></i> <% } else { %> <i class="fa fa-clock-o in-progress" aria-hidden="true"></i> <% } %></h2>
         <h2>Created by: <%= ticket.createdBy %></h2>
     </div>
 

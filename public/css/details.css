@@ -8,10 +8,19 @@
   text-align: left;
 }
 
+.fa-check.complete {
+    color: greenyellow;
+}
+
+.fa-clock-o.in-progress {
+    color: orangered;
+}
+
 #addComment {
   width: 400px;
   margin: 50px auto;
 }
+
 #comments {
   width: 620px;
   margin: 50px;
