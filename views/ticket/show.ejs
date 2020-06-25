@@ -5,13 +5,14 @@
 <body>
     <%- include('../shared/navbar', {}) %>
     <div class="details">
-        <h1>Details Ticket</h1>
-        <h2>Id : <%= ticket.id %></h2>
+        <h1>Ticket Details</h1>
+        <h2>ID : <%= ticket.id %></h2>
         <h2>Title : <%= ticket.title %></h2>
         <h2>Description : <%= ticket.description %></h2>
-        <h2>Responsable : <%= ticket.responsible %></h2>
+        <h2>Assigned to : <%= ticket.assignedTo %></h2>
         <h2>Priority : <%= ticket.priority %></h2>
-        <h2>Statut : <%= ticket.completed ? "Résolu" : "En cours" %></h2>
+        <h2>Status : <%= ticket.completed ? "Résolu" : "En cours" %></h2>
+        <h2>Created by: <%= ticket.createdBy %></h2>
     </div>
 </body>
 

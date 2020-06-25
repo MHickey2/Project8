@@ -8,7 +8,7 @@ function create(req, res) {
 		})
 	} else {
 		var ticket = {
-            createdBy: req.user.id,
+            createdBy: req.user.email,
 			title: req.body.title,
 			description: req.body.description,
 			responsible: req.body.responsible,
@@ -29,7 +29,7 @@ function create(req, res) {
 }
 
 function createForm(req, res) {
-	res.status(200).render('ticket/create', {title: 'Créer ticket'});
+  res.status(200).render("ticket/create", { title: "Créer ticket" });
 }
 
 function show(req, res) {
@@ -141,23 +141,16 @@ function edit(req, res) {
 
 function update(req, res) {
     console.log(req.body);
-    console.log(req.params.id)
-    console.log(req.body.description)
-    console.log(req.body.assignedTo)
-    console.log(req.body.priority)
-    console.log(req.params.id)
 
 	if (!req.params.id || !req.body.description || !req.body.assignedTo || !req.body.priority) {
 		res.status(400).json({
-			"text": "Invalid request !if"
+			"text": "Fields missing"
 		})
 	} else {
 		var findTicket = new Promise(function (resolve, reject) {
 			req.body.completed = typeof req.body.completed !== 'undefined' ? true : false;
 
 			Ticket.findByIdAndUpdate(req.params.id, req.body, function (err, result) {
-                console.log('result is0', result)
-                console.log('err is', err)
 				if (err) {
 					reject(500);
 				} else {
@@ -176,7 +169,7 @@ function update(req, res) {
 			switch (error) {
 				case 500:
 					res.status(500).json({
-						"text": "Internal error case 500"
+						"text": "Internal error"
 					})
 					break;
 				case 200:
@@ -186,7 +179,7 @@ function update(req, res) {
 					break;
 				default:
 					res.status(500).json({
-						"text": "Internal error default 500"
+						"text": "Internal error"
 					})
 			}
 		})
@@ -194,19 +187,19 @@ function update(req, res) {
 }
 
 function list(req, res) {
-	var findTicket = new Promise(function (resolve, reject) {
-		Ticket.find({}, function (err, tickets) {
-			if (err) {
-				reject(500);
-			} else {
-				if (tickets) {
-					resolve(tickets)
-				} else {
-					reject(200)
-				}
-			}
-		})
-	})
+  var findTicket = new Promise(function (resolve, reject) {
+    Ticket.find({}, function (err, tickets) {
+      if (err) {
+        reject(500);
+      } else {
+        if (tickets) {
+          resolve(tickets);
+        } else {
+          reject(200);
+        }
+      }
+    });
+  });
 
 	findTicket.then(function (tickets) {
 		res.status(200).render('ticket/index', {title: 'List of tickets', tickets});
@@ -219,7 +212,7 @@ function list(req, res) {
 				break;
 			case 200:
 				res.status(200).json({
-					"text": "Il n'y a pas encore de ticket"
+					"text": "Ticket does not exist yet"
 				})
 				break;
 			default:
