@@ -113,6 +113,12 @@ function edit(req, res) {
         Promise.all([findTicket, userEmails]).then(values => {
             let ticket = values[0];
             let userEmails = values[1];
+
+            if (ticket.assignedTo !== undefined) {
+                let removeEmail = userEmails.indexOf(ticket.assignedTo);
+                userEmails.splice(removeEmail, 1);
+            }
+            
 			res.status(200).render('ticket/edit', {title: `Modifier ticket n°${ticket._id}`, ticket, userEmails});
         }, function (error) {
 			switch (error) {

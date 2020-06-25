@@ -21,7 +21,11 @@
             <div class="form-group">
                 <label>Assign to: </label>
                 <select name="assignedTo">
-                    <option disabled="disabled" selected="selected">Select a user</option>
+                    <% if (ticket.assignedTo !== undefined) { %>
+                        <option selected="selected"><%= ticket.assignedTo %></option>
+                    <% } else { %>
+                        <option disabled="disabled" selected="selected">Select a user</option>
+                    <% } %>
                     <% userEmails.forEach(user => { %>
                     <option value="<%= user %>"><%= user %></option>
                     <% }); %>
