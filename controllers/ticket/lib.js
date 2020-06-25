@@ -204,7 +204,7 @@ function list(req, res) {
   });
 
 	findTicket.then(function (tickets) {
-		res.status(200).render('ticket/index', {title: 'List of tickets', tickets});
+		res.status(200).render('ticket/index', {title: 'List of tickets', tickets, isAdmin: req.user.isAdmin});
 	}, function (error) {
 		switch (error) {
 			case 500:
