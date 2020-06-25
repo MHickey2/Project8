@@ -14,4 +14,30 @@
       <h2>Created by: <%= ticket.createdBy %></h2>
     </div>
   </body>
+  <div id="addComment">
+    <form method="POST" id="formId">
+      <textarea
+        id="comment"
+        name="comment"
+        placeholder="Add comment"
+        style="width: 600px;"
+        required
+      ></textarea
+      ><br />
+      <button type="submit" class="btn">Post</button>
+    </form>
+  </div>
+  <div>
+    <table id="comments">
+      <% ticket.comments = ticket.comments.reverse();%>
+      <%ticket.comments.forEach(function (com){ %>
+      <tr>
+        <td>
+          <p><%= com.userName %></p>
+          <p><%= com.comment %></p>
+        </td>
+      </tr>
+      <% })%>
+    </table>
+  </div>
 </html>

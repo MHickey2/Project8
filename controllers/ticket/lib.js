@@ -225,9 +225,24 @@ function list(req, res) {
   );
 }
 
+function addComment(req, res) {
+  Ticket.update(
+    { _id: req.params.id },
+    {
+      $push: {
+        comments: { userName: req.user.email, comment: req.body.comment },
+      },
+    },
+    function (err, result) {
+      show(req, res);
+    }
+  );
+}
+
 exports.create = create;
 exports.createForm = createForm;
 exports.show = show;
 exports.edit = edit;
 exports.update = update;
 exports.list = list;
+exports.addComment = addComment;
