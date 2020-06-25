@@ -36,6 +36,7 @@ const authenticateAdmin = (req, res, next) => {
 
 router.get('/create', authenticateJWT, ticket.createForm);
 router.post('/create', authenticateJWT, ticket.create);
+router.get('/notassigned', authenticateJWT, ticket.showNotAssigned);
 router.get('/:id', authenticateJWT, ticket.show);
 router.get('/:id/edit', [authenticateJWT, authenticateAdmin], ticket.edit);
 router.post('/:id/update', authenticateJWT, ticket.update);
