@@ -286,7 +286,7 @@ function list(req, res) {
 
 function showNotAssigned(req, res) {
     var findTicket = new Promise(function (resolve, reject) {
-        Ticket.find({ assigned: false }, function (err, tickets) {
+        Ticket.where('assignedTo').equals(null).exec(function (err, tickets) {
             if (err) {
                 reject(err);
             } else {
@@ -301,11 +301,10 @@ function showNotAssigned(req, res) {
 
     findTicket.then(
         function (tickets) {
-             res.status(200).render('ticket/notassigned', {
-                title: 'unassigned tickets',
+            res.status(200).render('ticket/notassigned', {
+                title: 'Unassigned tickets',
                 tickets,
-            }); 
-            //res.json(tickets);
+            });
         },
         function (error) {
             switch (error) {

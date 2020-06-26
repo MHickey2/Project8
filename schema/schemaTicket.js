@@ -24,11 +24,6 @@ var ticketSchema = mongoose.Schema(
             required: true,
             default: false,
         },
-        assigned: {
-            type: Boolean,
-            required: true,
-            default: false,
-        },
         createdBy: {
             type: String,
             required: true,
