@@ -56,14 +56,13 @@ function show(req, res, next) {
             .then(
                 function (ticket) {
                     let showEditLink = false;
-                    if (
-                        ticket.createdBy === req.user.email ||
-                        req.user.isAdmin === true
-                    ) {
+                    if (ticket.createdBy === req.user.email || req.user.isAdmin === true) {
                         showEditLink = true;
                     }
 
-                    ticket.comments = ticket.comments.reverse();
+                    if (ticket.comments !== undefined) {
+                        ticket.comments = ticket.comments.reverse();
+                    }
 
                     res.status(200).render('ticket/show', {
                         title: `Ticket #${ticket._id}`,
