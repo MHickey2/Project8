@@ -1,13 +1,15 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <%- include('../shared/head', {css: ['index', 'navbar']}) %>
 
 <body>
     <%- include('../shared/navbar', {}) %>
-    <div class="container mt-4">
+    <div class="container mt-4 mb-5">
         <h1>List of tickets</h1>
-        <br>
-        <table class="mt-4">
+        <div class="my-4 text-center">
+            <a href="/ticket/notassigned" class="btn btn-primary">See Unassigned Tickets</a>
+        </div>
+        <table class="mt-4 mb-5">
             <thead>
                 <tr>
                     <th class="idTicket">Ticket title</th>
@@ -20,7 +22,7 @@
             <tbody>
                 <% for (index = 0; index < tickets.length; index++) { %>
                 <% const ticket = tickets[index] %>
-                <tr key={index}>
+                <tr>
                     <td><%= ticket.title %></td>
                     <td><a href="/ticket/<%= ticket._id %>" class="nav-link">View</a></td>
                     <% if (isAdmin === true) { %>
@@ -31,11 +33,6 @@
             </tbody>
         </table>
     </div>
-    <br>
-    <br>
-    <a href="/ticket/notassigned"><button class="assignquery">See Unassigned Tickets</button></a>
-    <!-- <a href="/ticket/notassigned" input type= "button" id="assignment"> See unassigned Tickets</a> -->
-        
 </body>
 
 </html>
