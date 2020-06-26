@@ -55,7 +55,7 @@ function show(req, res) {
         findTicket.then(
             function (ticket) {
                 let showEditLink = false;
-                if (ticket.createdBy === req.user.email) {
+                if (ticket.createdBy === req.user.email || req.user.isAdmin === true) {
                     showEditLink = true;
                 }
                 res.status(200).render('ticket/show', {
@@ -132,7 +132,7 @@ function edit(req, res) {
                 }
 
                 res.status(200).render('ticket/edit', {
-                    title: `Edit ticket n°${ticket._id}`,
+                    title: `Edit ticket #${ticket._id}`,
                     ticket,
                     userEmails,
                     isAdmin: req.user.isAdmin,

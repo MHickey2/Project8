@@ -4,54 +4,61 @@
 
 <body>
     <%- include('../shared/navbar', {}) %>
-    <div class="details">
-        <h1>Ticket Details</h1>
-        <h2>ID : <%= ticket.id %></h2>
-        <h2>Title : <%= ticket.title %></h2>
-        <h2>Description : <%= ticket.description %></h2>
-        <h2>Assigned to : <%= ticket.assignedTo %></h2>
-        <h2>Priority : <%= ticket.priority %></h2>
-        <h2>Status :
-            <% if(ticket.completed) { %>
-            <i class="fa fa-check complete" aria-hidden="true"></i>
-            <% } else { %>
-            <i class="fa fa-clock-o in-progress" aria-hidden="true"></i>
-            <% } %>
-        </h2>
-        <h2>Created by: <%= ticket.createdBy %></h2>
-    </div>
-    
-    
-    <% if (showEditLink === true) { %>
-        <div class="text-center">
-            <a href="/ticket/<%= ticket._id %>/edit" class="btn btn-primary">Edit</a>
+    <div class="container mb-5">
+        <div class="row">
+            <div class="col-10 col-md-8 mt-4 mx-auto">
+                <h1 class="text-center mb-4">Ticket Details</h1>
+                <h5><span class="font-weight-bold">ID:</span> <%= ticket.id %></h5>
+                <h5><span class="font-weight-bold">Title:</span> <%= ticket.title %></h5>
+                <h5><span class="font-weight-bold">Description:</span> <%= ticket.description %></h5>
+                <h5><span class="font-weight-bold">Assigned to:</span> <%= ticket.assignedTo %></h5>
+                <h5><span class="font-weight-bold">Priority:</span> <%= ticket.priority %></h5>
+                <h5><span class="font-weight-bold">Status:</span>
+                    <% if(ticket.completed) { %>
+                    <i class="fa fa-check complete" aria-hidden="true"></i>
+                    <% } else { %>
+                    <i class="fa fa-clock-o in-progress" aria-hidden="true"></i>
+                    <% } %>
+                </h5>
+                <h5><span class="font-weight-bold">Created by:</span> <%= ticket.createdBy %></h5>
+
+                <% if (showEditLink === true) { %>
+                <a href="/ticket/<%= ticket._id %>/edit" class="btn btn-primary my-4">Edit</a>
+                <% } %>
+
+            </div>
+
+            <div class="col-10 col-md-8 mt-4 mx-auto">
+                <form method="POST" id="formId" class="mb-4">
+                    <div class="form-group">
+                        <label for="comment">Comment: </label>
+                        <textarea id="comment" class="form-control" name="comment" placeholder="Add comment"
+                            required></textarea>
+                    </div>
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary">Add comment</button>
+                    </div>
+                </form>
+
+
+                <% if (typeof ticket.comments !== 'undefined') { %>
+                <div class="bg-dark text-light rounded shadow my-5 px-4">
+                    <table class="table table-dark">
+                        <% ticket.comments = ticket.comments.reverse();%>
+                        <%ticket.comments.forEach(function (com){ %>
+                        <tr>
+                            <td>
+                                <%= com.comment %>
+                                <div class="text-left"><small><em>&nbsp;- <%= com.userName %></em></small></div>
+                            </td>
+                        </tr>
+                        <% })%>
+                    </table>
+                </div>
+                <% } %>
+            </div>
         </div>
-    <% } %>
-
-
-    <div id="addComment">
-        <form method="POST" id="formId">
-            <textarea id="comment" name="comment" placeholder="Add comment" style="width: 600px;"
-                required></textarea><br />
-            <button type="submit" class="btn btn-primary">Post</button>
-        </form>
     </div>
-
-    <% if (typeof ticket.comments !== 'undefined') { %>
-    <div>
-        <table id="comments">
-            <% ticket.comments = ticket.comments.reverse();%>
-            <%ticket.comments.forEach(function (com){ %>
-            <tr>
-                <td>
-                    <p><%= com.comment %></p>
-                    <p><em>- <%= com.userName %></em></p>
-                </td>
-            </tr>
-            <% })%>
-        </table>
-    </div>
-    <% } %>
 </body>
 
 </html>
