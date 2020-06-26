@@ -307,6 +307,7 @@ function showNotAssigned(req, res) {
             res.status(200).render('ticket/notassigned', {
                 title: 'Unassigned tickets',
                 tickets,
+                isAdmin: req.user.isAdmin,
             });
         },
         function (error) {
