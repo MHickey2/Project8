@@ -44,11 +44,11 @@
                 <% if (typeof ticket.comments !== 'undefined') { %>
                 <div class="bg-dark text-light rounded shadow my-5 px-4">
                     <table class="table table-dark">
-                        <% ticket.comments = ticket.comments.reverse();%>
-                        <%ticket.comments.forEach(function (com){ %>
                         <tr>
                             <th>Comments</th>
                         </tr>
+                        <% ticket.comments = ticket.comments.reverse();%>
+                        <%ticket.comments.forEach(function (com){ %>
                         <tr>
                             <td>
                                 <%= com.comment %>
