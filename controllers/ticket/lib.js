@@ -32,7 +32,7 @@ function createForm(req, res) {
     res.status(200).render('ticket/create', { title: 'Create ticket' });
 }
 
-function show(req, res) {
+function show(req, res, next) {
     if (!req.params.id) {
         res.status(400).json({
             text: 'Invalid request',
@@ -52,40 +52,48 @@ function show(req, res) {
             });
         });
 
-        findTicket.then(
-            function (ticket) {
-                let showEditLink = false;
-                if (ticket.createdBy === req.user.email || req.user.isAdmin === true) {
-                    showEditLink = true;
-                }
+        findTicket
+            .then(
+                function (ticket) {
+                    let showEditLink = false;
+                    if (
+                        ticket.createdBy === req.user.email ||
+                        req.user.isAdmin === true
+                    ) {
+                        showEditLink = true;
+                    }
 
-                ticket.comments = ticket.comments.reverse();
-                
-                res.status(200).render('ticket/show', {
-                    title: `Ticket #${ticket._id}`,
-                    ticket,
-                    showEditLink,
-                });
-            },
-            function (error) {
-                switch (error) {
-                    case 500:
-                        res.status(500).json({
-                            text: 'Internal error',
-                        });
-                        break;
-                    case 200:
-                        res.status(200).json({
-                            text: 'The ticket does not exist',
-                        });
-                        break;
-                    default:
-                        res.status(500).json({
-                            text: 'Internal error',
-                        });
+                    ticket.comments = ticket.comments.reverse();
+
+                    res.status(200).render('ticket/show', {
+                        title: `Ticket #${ticket._id}`,
+                        ticket,
+                        showEditLink,
+                    });
+                },
+                function (error) {
+                    switch (error) {
+                        case 500:
+                            res.status(500).json({
+                                text: 'Internal error',
+                            });
+                            break;
+                        case 200:
+                            res.status(200).json({
+                                text: 'The ticket does not exist',
+                            });
+                            break;
+                        default:
+                            res.status(500).json({
+                                text: 'Internal error',
+                            });
+                    }
                 }
-            }
-        );
+            )
+            .catch((err) => {
+                console.log('Error in show function', err);
+                next(err);
+            });
     }
 }
 
@@ -289,17 +297,19 @@ function list(req, res) {
 
 function showNotAssigned(req, res) {
     var findTicket = new Promise(function (resolve, reject) {
-        Ticket.where('assignedTo').equals(null).exec(function (err, tickets) {
-            if (err) {
-                reject(err);
-            } else {
-                if (tickets) {
-                    resolve(tickets);
+        Ticket.where('assignedTo')
+            .equals(null)
+            .exec(function (err, tickets) {
+                if (err) {
+                    reject(err);
                 } else {
-                    reject(200);
+                    if (tickets) {
+                        resolve(tickets);
+                    } else {
+                        reject(200);
+                    }
                 }
-            }
-        });
+            });
     });
 
     findTicket.then(
