@@ -7,7 +7,7 @@ function signup(req, res) {
         //Le cas où l'email ou bien le password ne serait pas soumit ou nul
         console.log(req.body);
         res.status(400).json({
-            text: 'Requête invalide',
+            text: 'Invalid request',
         });
     } else {
         bcrypt.hash(req.body.password, saltRounds, function (err, hash) {
@@ -40,7 +40,7 @@ function signup(req, res) {
                     _u.save(function (err, user) {
                         if (err) {
                             res.status(500).json({
-                                text: 'Erreur interne',
+                                text: 'Internal error',
                             });
                         } else {
                             req.session.token = user.getToken();
@@ -53,7 +53,7 @@ function signup(req, res) {
                     switch (error) {
                         case 500:
                             res.status(500).json({
-                                text: 'Erreur interne',
+                                text: 'Internal error',
                             });
                             break;
                         case 200:
@@ -63,7 +63,7 @@ function signup(req, res) {
                             break;
                         default:
                             res.status(500).json({
-                                text: 'Erreur interne',
+                                text: 'Internal error',
                             });
                     }
                 }
@@ -80,7 +80,7 @@ function login(req, res) {
     if (!req.body.email || !req.body.password) {
         //Le cas où l'email ou bien le password ne serait pas soumit ou nul
         res.status(400).json({
-            text: 'Requête invalide',
+            text: 'Invalid request',
         });
     } else {
         User.findOne(
@@ -90,21 +90,21 @@ function login(req, res) {
             function (err, user) {
                 if (err) {
                     res.status(500).json({
-                        text: 'Erreur interne',
+                        text: 'Internal error',
                     });
                 } else if (!user) {
                     res.status(401).json({
                         text: "L'utilisateur n'existe pas",
                     });
                 } else {
-                    bcrypt.compare(req.body.password, user.password, function (
+                    bcrypt.compare(req.body.password, user.password, async function (
                         err,
-                        match
+                        passwordsMatch
                     ) {
                         if (err) throw err;
 
-                        if (match === true) {
-                            req.session.token = user.getToken();
+                        if (passwordsMatch === true) {
+                            req.session.token = await user.getToken();
                             res.redirect('../../ticket/');
                         } else {
                             res.status(401).json({
