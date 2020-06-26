@@ -47,15 +47,14 @@
                         <tr>
                             <th>Comments</th>
                         </tr>
-                        <% ticket.comments = ticket.comments.reverse();%>
-                        <%ticket.comments.forEach(function (com){ %>
+                        <% ticket.comments.forEach(function (com) { %>
                         <tr>
                             <td>
                                 <%= com.comment %>
                                 <div class="text-left"><small><em>&nbsp;- <%= com.userName %></em></small></div>
                             </td>
                         </tr>
-                        <% })%>
+                        <% }); %>
                     </table>
                 </div>
                 <% } %>
