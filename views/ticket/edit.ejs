@@ -5,7 +5,7 @@
 <body>
     <%- include('../shared/navbar', {}) %>
     <div>
-        <h3>Edit Ticket n°<%= ticket._id %></h3>
+        <h3>Edit Ticket #<%= ticket._id %></h3>
         <form method="POST" action="/ticket/<%= ticket._id %>/update">
             <input type="hidden" value="<%= ticket._id %>">
             <div class="form-group">
@@ -18,38 +18,40 @@
                 <textarea type="text" class="form-control" name="description"><%= ticket.description %></textarea>
             </div>
 
+            <% if (isAdmin === true) { %>
             <div class="form-group">
                 <label>Assign to: </label>
                 <select name="assignedTo">
                     <% if (ticket.assignedTo !== undefined) { %>
-                        <option selected="selected"><%= ticket.assignedTo %></option>
+                    <option selected="selected"><%= ticket.assignedTo %></option>
                     <% } else { %>
-                        <option disabled="disabled" selected="selected">Select a user</option>
+                    <option disabled="disabled" selected="selected">Select a user</option>
                     <% } %>
                     <% userEmails.forEach(user => { %>
                     <option value="<%= user %>"><%= user %></option>
                     <% }); %>
                 </select>
             </div>
+            <% } %>
 
             <div class="form-group">
                 <label>Priority: </label>
                 <div class="form-check form-check-inline">
                     <input class="form-check-input" type="radio" name="priority" value="Low"
                         <%= ticket.priority === 'Low' ? "checked " : "" %> />
-                    <label class="form-check-label">Basse</label>
+                    <label class="form-check-label">Low</label>
                 </div>
 
                 <div class="form-check form-check-inline">
                     <input class="form-check-input" type="radio" name="priority" value="Medium"
                         <%= ticket.priority === 'Medium' ? "checked " : "" %> />
-                    <label class="form-check-label">Moyen</label>
+                    <label class="form-check-label">Medium</label>
                 </div>
 
                 <div class="form-check form-check-inline">
                     <input class="form-check-input" type="radio" name="priority" value="High"
                         <%= ticket.priority === 'High' ? "checked " : "" %> />
-                    <label class="form-check-label">Haute</label>
+                    <label class="form-check-label">High</label>
                 </div>
             </div>
 

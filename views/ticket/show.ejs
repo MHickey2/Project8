@@ -20,6 +20,13 @@
         </h2>
         <h2>Created by: <%= ticket.createdBy %></h2>
     </div>
+    
+    
+    <% if (showEditLink === true) { %>
+        <div class="text-center">
+            <a href="/ticket/<%= ticket._id %>/edit" class="btn btn-primary">Edit</a>
+        </div>
+    <% } %>
 
 
     <div id="addComment">
