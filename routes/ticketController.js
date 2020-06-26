@@ -34,11 +34,30 @@ const authenticateAdmin = (req, res, next) => {
     }
 };
 
+const authoriseEdit = (req, res, next) => {
+    let userIsCreator = ticket.validateCreator(req, res, next);
+
+    userIsCreator
+        .then((permission) => {
+            console.log('permission is', permission);
+            if (!permission && req.user.isAdmin !== true) {
+                console.log('auth admin %s', req.user.isAdmin);
+                res.status(200).render('account/login', { title: 'Login' });
+            } else {
+                next();
+            }
+        })
+        .catch((err) => {
+            res.json(err);
+        });
+};
+
 router.get('/create', authenticateJWT, ticket.createForm);
 router.post('/create', authenticateJWT, ticket.create);
 router.get('/notassigned', authenticateJWT, ticket.showNotAssigned);
 router.get('/:id', authenticateJWT, ticket.show);
-router.get('/:id/edit', [authenticateJWT, authenticateAdmin], ticket.edit);
+router.post('/:id', authenticateJWT, ticket.addComment);
+router.get('/:id/edit', [authenticateJWT, authoriseEdit], ticket.edit);
 router.post('/:id/update', authenticateJWT, ticket.update);
 router.get('/', authenticateJWT, ticket.list);
 

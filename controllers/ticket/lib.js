@@ -19,7 +19,7 @@ function create(req, res) {
         _t.save(function (err, ticket) {
             if (err) {
                 res.status(500).json({
-                    text: 'Internal error 1',
+                    text: 'Internal error',
                 });
             } else {
                 res.redirect(`${ticket.getId()}`);
@@ -29,7 +29,7 @@ function create(req, res) {
 }
 
 function createForm(req, res) {
-    res.status(200).render('ticket/create', { title: 'Créer ticket' });
+    res.status(200).render('ticket/create', { title: 'Create ticket' });
 }
 
 function show(req, res) {
@@ -54,16 +54,21 @@ function show(req, res) {
 
         findTicket.then(
             function (ticket) {
+                let showEditLink = false;
+                if (ticket.createdBy === req.user.email || req.user.isAdmin === true) {
+                    showEditLink = true;
+                }
                 res.status(200).render('ticket/show', {
-                    title: `Ticket n°${ticket._id}`,
+                    title: `Ticket #${ticket._id}`,
                     ticket,
+                    showEditLink,
                 });
             },
             function (error) {
                 switch (error) {
                     case 500:
                         res.status(500).json({
-                            text: 'Internal error 2',
+                            text: 'Internal error',
                         });
                         break;
                     case 200:
@@ -73,7 +78,7 @@ function show(req, res) {
                         break;
                     default:
                         res.status(500).json({
-                            text: 'Internal error 3',
+                            text: 'Internal error',
                         });
                 }
             }
@@ -120,17 +125,24 @@ function edit(req, res) {
             (values) => {
                 let ticket = values[0];
                 let userEmails = values[1];
+
+                if (ticket.assignedTo !== undefined) {
+                    let removeEmail = userEmails.indexOf(ticket.assignedTo);
+                    userEmails.splice(removeEmail, 1);
+                }
+
                 res.status(200).render('ticket/edit', {
-                    title: `Modifier ticket n°${ticket._id}`,
+                    title: `Edit ticket #${ticket._id}`,
                     ticket,
                     userEmails,
+                    isAdmin: req.user.isAdmin,
                 });
             },
             function (error) {
                 switch (error) {
                     case 500:
                         res.status(500).json({
-                            text: 'Internal error 4',
+                            text: 'Internal error',
                         });
                         break;
                     case 200:
@@ -140,25 +152,44 @@ function edit(req, res) {
                         break;
                     default:
                         res.status(500).json({
-                            text: 'Internal error 5',
+                            text: 'Internal error',
                         });
                 }
             }
         );
-
-        findTicket.then(function (ticket) {});
     }
+}
+
+function validateCreator(req, res, next) {
+    let ticketCreator = new Promise(function (resolve, reject) {
+        Ticket.findById(req.params.id, function (err, ticket) {
+            if (err) {
+                reject(500);
+            } else {
+                let createdBy = ticket.createdBy;
+                console.log('validateCreator createdBy', createdBy);
+                resolve(createdBy);
+            }
+        });
+    });
+
+    return ticketCreator
+        .then((createdBy) => {
+            if (createdBy === req.user.email) {
+                return true;
+            } else {
+                return false;
+            }
+        })
+        .catch((err) => {
+            next(err);
+        });
 }
 
 function update(req, res) {
     console.log(req.body);
 
-    if (
-        !req.params.id ||
-        !req.body.description ||
-        !req.body.assignedTo ||
-        !req.body.priority
-    ) {
+    if (!req.params.id || !req.body.description || !req.body.priority) {
         res.status(400).json({
             text: 'Fields missing',
         });
@@ -191,7 +222,7 @@ function update(req, res) {
                 switch (error) {
                     case 500:
                         res.status(500).json({
-                            text: 'Internal error 6',
+                            text: 'Internal error',
                         });
                         break;
                     case 200:
@@ -201,7 +232,7 @@ function update(req, res) {
                         break;
                     default:
                         res.status(500).json({
-                            text: 'Internal error 7',
+                            text: 'Internal error',
                         });
                 }
             }
@@ -229,13 +260,14 @@ function list(req, res) {
             res.status(200).render('ticket/index', {
                 title: 'List of tickets',
                 tickets,
+                isAdmin: req.user.isAdmin,
             });
         },
         function (error) {
             switch (error) {
                 case 500:
                     res.status(500).json({
-                        text: 'Internal error 8',
+                        text: 'Internal error',
                     });
                     break;
                 case 200:
@@ -245,7 +277,7 @@ function list(req, res) {
                     break;
                 default:
                     res.status(500).json({
-                        text: 'Internal error 9',
+                        text: 'Internal error',
                     });
             }
         }
@@ -279,7 +311,7 @@ function showNotAssigned(req, res) {
             switch (error) {
                 case 500:
                     res.status(500).json({
-                        text: 'Internal error case 500',
+                        text: 'Internal error',
                     });
                     break;
                 case 200:
@@ -289,9 +321,26 @@ function showNotAssigned(req, res) {
                     break;
                 default:
                     res.status(500).json({
-                        text: 'Internal error default',
+                        text: 'Internal error',
                     });
             }
+        }
+    );
+}
+
+function addComment(req, res) {
+    Ticket.update(
+        { _id: req.params.id },
+        {
+            $push: {
+                comments: {
+                    userName: req.user.email,
+                    comment: req.body.comment,
+                },
+            },
+        },
+        function (err, result) {
+            show(req, res);
         }
     );
 }
@@ -303,3 +352,5 @@ exports.edit = edit;
 exports.update = update;
 exports.list = list;
 exports.showNotAssigned = showNotAssigned;
+exports.addComment = addComment;
+exports.validateCreator = validateCreator;

@@ -4,14 +4,16 @@
 
 <body>
     <%- include('../shared/navbar', {}) %>
-    <div>
+    <div class="container mt-4">
         <h1>List of tickets</h1>
-        <table>
+        <table class="mt-4">
             <thead>
                 <tr>
-                    <th class="idTicket">Title ticket</th>
+                    <th class="idTicket">Ticket title</th>
                     <th class="showTicket">View Ticket</th>
+                    <% if (isAdmin === true) { %>
                     <th class="editTicket">Edit Ticket</th>
+                    <% } %>
                 </tr>
             </thead>
             <tbody>
@@ -20,7 +22,9 @@
                 <tr key={index}>
                     <td><%= ticket.title %></td>
                     <td><a href="/ticket/<%= ticket._id %>" class="nav-link">View</a></td>
+                    <% if (isAdmin === true) { %>
                     <td><a href="/ticket/<%= ticket._id %>/edit" class="nav-link">Edit</a></td>
+                    <% } %>
                 </tr>
                 <% } %>
             </tbody>
