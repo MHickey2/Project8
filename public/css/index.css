@@ -19,3 +19,10 @@ thead > tr > th {
 td, th {
 	text-align: center;
 }
+
+.assignquery{
+	margin-left: auto;
+	margin-right: auto;
+	display: block;
+	
+}

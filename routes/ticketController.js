@@ -54,6 +54,7 @@ const authoriseEdit = (req, res, next) => {
 
 router.get('/create', authenticateJWT, ticket.createForm);
 router.post('/create', authenticateJWT, ticket.create);
+router.get('/notassigned', authenticateJWT, ticket.showNotAssigned);
 router.get('/:id', authenticateJWT, ticket.show);
 router.post('/:id', authenticateJWT, ticket.addComment);
 router.get('/:id/edit', [authenticateJWT, authoriseEdit], ticket.edit);

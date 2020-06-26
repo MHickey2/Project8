@@ -287,6 +287,49 @@ function list(req, res) {
     );
 }
 
+function showNotAssigned(req, res) {
+    var findTicket = new Promise(function (resolve, reject) {
+        Ticket.where('assignedTo').equals(null).exec(function (err, tickets) {
+            if (err) {
+                reject(err);
+            } else {
+                if (tickets) {
+                    resolve(tickets);
+                } else {
+                    reject(200);
+                }
+            }
+        });
+    });
+
+    findTicket.then(
+        function (tickets) {
+            res.status(200).render('ticket/notassigned', {
+                title: 'Unassigned tickets',
+                tickets,
+            });
+        },
+        function (error) {
+            switch (error) {
+                case 500:
+                    res.status(500).json({
+                        text: 'Internal error',
+                    });
+                    break;
+                case 200:
+                    res.status(200).json({
+                        text: 'Ticket does not exist yet',
+                    });
+                    break;
+                default:
+                    res.status(500).json({
+                        text: 'Internal error',
+                    });
+            }
+        }
+    );
+}
+
 function addComment(req, res) {
     Ticket.update(
         { _id: req.params.id },
@@ -310,5 +353,6 @@ exports.show = show;
 exports.edit = edit;
 exports.update = update;
 exports.list = list;
+exports.showNotAssigned = showNotAssigned;
 exports.addComment = addComment;
 exports.validateCreator = validateCreator;
