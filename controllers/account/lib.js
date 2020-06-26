@@ -118,28 +118,6 @@ function login(req, res) {
     }
 }
 
-//verify admin
-// function verifyAdmin(req,res){
-//     const name = req.body.username
-//     console.log(name)
-//     User.findOne({username: name},(err,user) => {
-//         if(err) {
-//             next(err)
-//         }
-//         else if(!user) {
-//             next(new Error("user not found"))
-//         }
-//         else {
-//             if(!user.admin) {
-//                 next(new Error("you are not an admin"))
-//             }
-//             else {
-//                 next()
-//             }
-//         }
-//     });
-// };
-
 function loginForm(req, res) {
     res.status(200).render('account/login', { title: 'Login' });
 }
