@@ -301,11 +301,11 @@ function showNotAssigned(req, res) {
 
     findTicket.then(
         function (tickets) {
-            /* res.status(200).render('notassigned', {
+             res.status(200).render('ticket/notassigned', {
                 title: 'unassigned tickets',
                 tickets,
-            }); */
-            res.json(tickets);
+            }); 
+            //res.json(tickets);
         },
         function (error) {
             switch (error) {

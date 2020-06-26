@@ -57,6 +57,8 @@ app.use('/user', userRouter);
 var ticketRouter = require(__dirname + '/routes/ticketController');
 app.use('/ticket', ticketRouter);
 
+
+
 //Définition et mise en place du port d'écoute
 var port = 8000;
 app.listen(port, () => console.log(`Listening on port ${port}`));

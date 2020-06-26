@@ -4,8 +4,10 @@
 
 <body>
     <%- include('../shared/navbar', {}) %>
+    <br>
     <div class="container mt-4">
         <h1>List of tickets</h1>
+        <br>
         <table class="mt-4">
             <thead>
                 <tr>
@@ -30,19 +32,11 @@
             </tbody>
         </table>
     </div>
-
-    <a href="/ticket/notassigned" input type= "button" id="assignment"> See unassigned Tickets</a>
-         <div class ="assignment section">
-        <%# for (index = 0; index < tickets.length; index++) { %>
-        <%# const ticket = tickets[index] %>
-            <h1>Details Ticket</h1>
-            <h2>Id : <%#= ticket.id %></h2>
-            <h2>Titre : <%#= ticket.title %></h2>
-            <h2>Description : <%#= ticket.description %></h2>
-            <h2>Responsable : <%#= ticket.responsible %></h2>
-            <h2>Priorité : <%#= ticket.priority %></h2>
-            <h2>Statut : <%#= ticket.completed ? "Résolu" : "En cours" %></h2>
-        </div>
+    <br>
+    <br>
+    <a href="/ticket/notassigned"><button class="assignquery">See Unassigned Tickets</button></a>
+    <!-- <a href="/ticket/notassigned" input type= "button" id="assignment"> See unassigned Tickets</a> -->
+        
 </body>
 
 </html>

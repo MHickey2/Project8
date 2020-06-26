@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <%- include('../shared/head', {css: ['index', 'navbar']}) %>
+    
+    <body>
+        <%- include('../shared/navbar', {}) %>
+<br>
+         <div class="container mt-4">
+            <h1>List of Unassigned tickets</h1>
+            <br>
+            <table class="mt-4">
+                <thead>
+                    <tr>
+                        <th class="idTicket">Ticket title</th>
+                        <th class="showTicket">View Ticket</th>
+                        <th class="editTicket">Edit Ticket</th>
+                        
+                    </tr>
+                </thead>
+                <tbody>
+                    <% for (index = 0; index < tickets.length; index++) { %>
+                    <% const ticket = tickets[index] %>
+                    <tr key={index}>
+                        <td><%= ticket.title %></td>
+                        <td><a href="/ticket/<%= ticket._id %>" class="nav-link">View</a></td>
+                        <td><a href="/ticket/<%= ticket._id %>/edit" class="nav-link">Edit</a></td>
+                    </tr>
+                    <% } %>
+                </tbody>
+            </table>
+        </div>
+    
+         
+         
+    </body>
+</html>
