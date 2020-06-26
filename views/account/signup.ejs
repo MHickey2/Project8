@@ -1,26 +1,34 @@
 <!DOCTYPE html>
 <html lang="fr">
-    <%- include('../shared/head', {css: ['login']}) %>
-    <body>
+<%- include('../shared/head', {css: ['login']}) %>
+
+<body>
+    <div class="container my-5">
         <form method="POST" action="/user/signup">
             <div class="form-group">
                 <label>Email</label>
-                <input autoFocus type="email" name="email"/>
+                <input autoFocus type="email" name="email" />
             </div>
 
             <div class="form-group">
-                <label>Mot de passe</label>
-                <input type="password" name="password"/>
+                <label>Password</label>
+                <input type="password" name="password" />
             </div>
 
             <div class="form-group">
-                <label>Confirmer mot de passe</label>
-                <input type="password" name="cpassword"/>
+                <label>Confirm Password</label>
+                <input type="password" name="cpassword" />
             </div>
 
             <div class="form-group">
-                <input type="submit" class="btn btn-primary" />
+                <input type="submit" class="btn btn-primary" value="Sign up" />
             </div>
         </form>
-    </body>
+
+        <div class="text-center">
+            <a href="/user/login" class="btn btn-outline-primary my-4">Login</a>
+        </div>
+    </div>
+</body>
+
 </html>
